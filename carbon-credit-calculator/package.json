@@ -2,15 +2,15 @@
   "name": "@undp/carbon-credit-calculator",
   "version": "1.0.0",
   "description": "Carbon Credit Calculator",
-  "main": "./dist/esm/index.js",
+  "main": "./dist/server/server.js",
   "module": "./dist/cjs/index.js",
   "license": "MIT",
   "scripts": {
     "devBuild": "yarn install && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
-    "build": "yarn install --production && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+    "build": "tsc -p tsconfig.json",
     "prepublishOnly": "yarn install --production && yarn run build",
     "test": "jest --coverage",
-    "start": "ts-node src/server/server.ts"
+    "start": "node dist/server/server.ts"
   },
   "files": [
     "dist/"
