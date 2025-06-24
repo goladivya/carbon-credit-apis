@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Carbon Credit Calculator</title>
   <link rel="stylesheet" href="index.css">
 </head>
+
 <body>
 
   <div class="container">
@@ -121,9 +123,12 @@
       });
 
       const body = { type, data };
+      const BASE_URL = window.location.hostname.includes("localhost")
+        ? "http://localhost:3050"
+        : "https://carbon-credit-calculator.onrender.com";
 
       try {
-        const res = await fetch("http://localhost:3050/api/calculate", {
+        const res = await fetch(`${BASE_URL}/api/calculate`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body)
@@ -141,4 +146,5 @@
     }
   </script>
 </body>
+
 </html>
