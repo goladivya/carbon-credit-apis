@@ -9,7 +9,8 @@
     "devBuild": "yarn install && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "build": "yarn install --production && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "prepublishOnly": "yarn install --production && yarn run build",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "start": "ts-node src/server/server.ts"
   },
   "files": [
     "dist/"
