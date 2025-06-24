@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Carbon Credit Calculator</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <div class="container">
+    <h2>Carbon Credit Calculator</h2>
+
+    <label for="calcType">Choose a type:</label>
+    <select id="calcType">
+      <option value="">-- Select --</option>
+      <option value="solar">Solar</option>
+      <option value="thermal">Thermal</option>
+      <option value="hydro">Hydro</option>
+      <option value="transmission">Transmission</option>
+      <option value="transportation">Transportation</option>
+    </select>
+
+    <form id="inputForm"></form>
+
+    <button onclick="submitForm()">Calculate</button>
+
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById("inputForm");
+    const resultDiv = document.getElementById("result");
+
+    const fieldTemplates = {
+      solar: [
+        { name: "energyGeneration", type: "number", label: "Energy Generation (e.g., 1000)" },
+        { name: "energyGenerationUnit", type: "text", value: "kWh/year/unit", label: "Unit (e.g., kWh/year/unit)" },
+        {
+          name: "buildingType",
+          type: "select",
+          options: [
+            "Household", "HealthCenter", "Dispensary", "School",
+            "PrimarySchool", "SecondarySchool", "PublicAdministration",
+            "TradingPlace", "BusStop"
+          ],
+          label: "Building Type"
+        }
+      ],
+      thermal: [
+        {
+          name: "fuelType",
+          type: "select",
+          options: ["coal", "diesel", "natural_gas"],
+          label: "Fuel Type"
+        },
+        { name: "fuelAmount", type: "number", label: "Fuel Amount" },
+        { name: "fuelUnit", type: "text", value: "kg", label: "Unit (kg/l/m³)" }
+      ],
+      hydro: [
+        { name: "reservoirArea", type: "number", label: "Reservoir Area (e.g., 1200)" },
+        { name: "areaUnit", type: "text", value: "km2", label: "Area Unit" },
+        { name: "duration", type: "number", value: 365, label: "Duration (e.g., 365)" },
+        { name: "durationUnit", type: "text", value: "year", label: "Duration Unit" }
+      ],
+      transmission: [
+        { name: "totalGenerated", type: "number", label: "Total Generated Energy (e.g., 10000)" },
+        { name: "totalDelivered", type: "number", label: "Total Delivered Energy (e.g., 9500)" },
+        { name: "unit", type: "text", value: "kWh", label: "Unit (e.g., kWh)" }
+      ],
+      transportation: [
+        { name: "fuelUsed", type: "number", label: "Fuel Used (e.g., 100)" },
+        { name: "fuelUnit", type: "text", value: "l", label: "Unit (e.g., liters)" }
+      ]
+    };
+
+    document.getElementById("calcType").addEventListener("change", (e) => {
+      const type = e.target.value;
+      form.innerHTML = "";
+
+      const fields = fieldTemplates[type];
+      if (!fields) return;
+
+      fields.forEach(field => {
+        const label = document.createElement("label");
+        label.textContent = field.label || field.name;
+
+        if (field.type === "select") {
+          const select = document.createElement("select");
+          select.name = field.name;
+          field.options.forEach(opt => {
+            const option = document.createElement("option");
+            option.value = opt;
+            option.textContent = opt;
+            select.appendChild(option);
+          });
+          form.appendChild(label);
+          form.appendChild(select);
+        } else {
+          const input = document.createElement("input");
+          input.type = field.type;
+          input.name = field.name;
+          if (field.value) input.value = field.value;
+          form.appendChild(label);
+          form.appendChild(input);
+        }
+      });
+    });
+
+    async function submitForm() {
+      const type = document.getElementById("calcType").value;
+      if (!type) {
+        alert("Please select a type.");
+        return;
+      }
+
+      const data = {};
+      new FormData(form).forEach((val, key) => {
+        const fieldType = fieldTemplates[type]?.find(f => f.name === key)?.type;
+        data[key] = fieldType === "number" ? Number(val) : val;
+      });
+
+      const body = { type, data };
+
+      try {
+        const res = await fetch("http://localhost:3050/api/calculate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body)
+        });
+
+        const result = await res.json();
+        resultDiv.textContent = res.ok
+          ? `Result: ${result.result} tCO2`
+          : `Error: ${result.error}`;
+        resultDiv.className = "result " + (res.ok ? "green" : "red");
+      } catch (err) {
+        resultDiv.textContent = "Network error";
+        resultDiv.className = "result red";
+      }
+    }
+  </script>
+</body>
+</html>
