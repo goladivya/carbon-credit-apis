@@ -2,7 +2,6 @@ import express from "express";
 import path from "path";
 import {
   calculateCredit,
-  AgricultureCreationRequest,
   SolarCreationRequest,
   ThermalCreationRequest,
   HydroCreationRequest,
@@ -15,7 +14,7 @@ import {
   TransportationConstant,
 
 
-} from "../../src"; // ⬅ clean import from index.ts
+} from "../index"; // ⬅ clean import from index.ts
 
 const app = express();
 app.use(express.json());
@@ -34,7 +33,7 @@ app.post("/api/calculate", (req, res) => {
       case "solar":
         requestObj = new SolarCreationRequest();
         Object.assign(requestObj, data);
-        requestObj.solarConstants = new SolarConstants(); // ✅ did you add this line?
+        requestObj.solarConstants = new SolarConstants(); 
         break;
       case "thermal":
         requestObj = new ThermalCreationRequest();
@@ -68,7 +67,7 @@ app.post("/api/calculate", (req, res) => {
     res.json({ result });
 
   } catch (err: any) {
-    console.error("❌ Error occurred:", err);
+    console.error(" Error occurred:", err);
     res.status(500).json({ error: err.message });
   }
 });
