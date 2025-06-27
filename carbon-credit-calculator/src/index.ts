@@ -14,7 +14,7 @@ import { TransportationCreationRequest } from './requests/transportationCreation
 import { TransportationConstant } from './constants/transportationConsrants';
 import { HydroCreationRequest } from './requests/hydroCreationRequest';
 import { HydroConstant } from './constants/hydroConstants';
-
+import { SolarCal } from './calculators/solarCal';
 export {
     calculateCredit,
     CreditCreationRequest,
@@ -31,5 +31,6 @@ export {
     TransportationConstant,
     TransportationCreationRequest,
     TransmissionConstants,
-    TransmissionCreationRequest
+    TransmissionCreationRequest,
+    SolarCal
 }
