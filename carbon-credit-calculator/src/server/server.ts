@@ -180,22 +180,29 @@ app.post("/api/calculate", (req: Request, res: Response): void => {
           });
 
           const total = requests.reduce((acc, req) => acc + calculateCredit(req), 0);
-          const breakdown = requests.map((req, index) => ({
-            index,
-            vehicleType: req.vehicleType,
-            fuelUsed: req.fuelUsed,
-            emissionReduction: calculateCredit(req)
-          }));
+          const breakdown = requests.map((req, index) => {
+            const factor = transportConst.emissionFactors[req.vehicleType];
+            return {
+              index,
+              vehicleType: req.vehicleType,
+              fuelUsed: req.fuelUsed,
+              emissionFactor: factor,
+              emissionReduction: calculateCredit(req)
+            };
+          });
 
           const trees = calculateTreesNeeded(total);
           const suggestions = getSuggestedProjects(type);
+          const emissionFactorsUsed = Object.fromEntries(
+            requests.map(req => [req.vehicleType, transportConst.emissionFactors[req.vehicleType]])
+          );
 
           res.json({
             result: {
               totalCredit: Number(total.toFixed(2)),
               breakdown
             },
-            emissionFactor: "vehicle-specific",
+            emissionFactorsUsed,
             unit: "kg CO₂/l",
             source: "IPCC / Transport Guidelines",
             category: "Transport",
