@@ -31,9 +31,9 @@ export class SolarCal {
             factor = factor / convert(1).from(thresholdUnitParts[1]).to(measuredUnitParts[1]);
             threshold = Number(threshold * factor)
         }
-        
+
         const unitX = convert(1).from(measuredUnitParts[0]).to(emissionUnitParts[1]);
-        
+
         const highFactor = Number(constants.highEmissionFactor * unitX);
         const lowFactor = Number(constants.lowEmissionFactor * unitX);
 
@@ -45,4 +45,45 @@ export class SolarCal {
         }
         return Number(value.toFixed(PRECISION))
     }
-}
+
+
+
+    public static calculateMultiple(
+        requests: SolarCreationRequest[]
+    ): {
+        totalCredit: number;
+        breakdown: {
+            index: number;
+            buildingType: string;
+            energyGeneration: number;
+            emissionReduction: number;
+        }[];
+    } {
+        let totalCredit = 0;
+
+        const breakdown = requests.map((request, index) => {
+            const emissionReduction = SolarCal.calculate(request);
+            totalCredit += emissionReduction;
+
+            return {
+                index,
+                buildingType: request.buildingType,
+                energyGeneration: request.energyGeneration,
+                emissionReduction,
+            };
+        });
+
+        return {
+            totalCredit: Number(totalCredit.toFixed(PRECISION)),
+            breakdown,
+        };
+    }
+
+};
+
+
+
+
+
+
+
