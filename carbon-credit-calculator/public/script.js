@@ -5,7 +5,7 @@ const emissionInfoDiv = document.getElementById("emission-info");
 const unitGuidelines = {
   solar: `
         <p><strong>Energy Generation:</strong> Enter in kWh/year</p>
-        <p><strong>Unit:</strong> Should be "kWh/year/unit"</p>
+        <p><strong>Unit:</strong> Should be "kWh/year/unit" or "Mwh/year/unit</p>
           <p><strong>Building Type:</strong> Select the building type that best describes where the solar system is installed. Each type represents an assumed average energy consumption per unit, which affects the carbon credit calculation.</p>
     <ul>
       <li><strong>Household</strong>: 55 kWh/year — Residential units or homes.</li>
@@ -17,8 +17,8 @@ const unitGuidelines = {
       <li><strong>PublicAdministration</strong>: 55 kWh/year — Government offices, municipal buildings.</li>
       <li><strong>TradingPlace</strong>: 825 kWh/year — Markets or commercial hubs.</li>
       <li><strong>BusStop</strong>: 200 kWh/year — Electrified public transport stops (e.g., with lighting, signage).</li>
-    </ul>
-    <p><strong>Source:</strong> Based on average electricity consumption assumptions from project standards (IPCC and national datasets).</p>`,
+    </ul>`
+,
   thermal: `<p><strong>Fuel Amount:</strong> Enter amount of fuel in liters</p> `,
   hydro: `<p><strong>Reservoir Area:</strong> Use in square kilometers (km2)</p>`,
   transmission: `<p><strong>Total Generated & Delivered:</strong> Use in kWh</p>`,
@@ -149,7 +149,7 @@ document.getElementById("calcType").addEventListener("change", (e) => {
 
 async function submitForm() {
   const type = document.getElementById("calcType").value;
-  const currency = document.getElementById("currency").value;
+ const countryCode = document.getElementById("countryCode").value;
   if (!type) return alert("Please select a type.");
   let data;
 
@@ -192,7 +192,7 @@ async function submitForm() {
     const res = await fetch(`${BASE_URL}/api/calculate`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ type, data, currency })
+      body: JSON.stringify({ type, data, countryCode })
     });
 
     const result = await res.json();
@@ -249,3 +249,4 @@ async function submitForm() {
     resultDiv.className = "result red";
   }
 }
+
