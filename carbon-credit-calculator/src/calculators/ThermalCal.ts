@@ -1,26 +1,15 @@
-import {PRECISION} from '../calculator';
-import { ThermalCreationRequest } from '../requests/thermalCreationRequest';
-const convert = require('convert-units');
+import { PRECISION } from "../calculator";
+import { ThermalCreationRequest } from "../requests/thermalCreationRequest";
 
-
-export class ThermalCal{
-    public static calculate (req :ThermalCreationRequest):number{
-        const constants = req.ThermalConstants;
-        const emissionData = constants.emissionFactors[req.fuelType];
-           if (!emissionData) {
-      throw new Error(`Unsupported fuel type: ${req.fuelType}`);
+export class ThermalCal {
+  public static calculate(req: ThermalCreationRequest): number {
+    if (req.fuelUnit !== req.expectedUnit) {
+      throw new Error(
+        `Unit mismatch: expected '${req.expectedUnit}' for ${req.fuelType}, but got '${req.fuelUnit}'`
+      );
     }
 
-    let convertedFuelAmount;
-    try {
-      convertedFuelAmount = convert(req.fuelAmount).from(req.fuelUnit).to(emissionData.unit);
-    } catch (e) {
-      throw new Error(`Failed to convert from ${req.fuelUnit} to ${emissionData.unit}`);
-    }
-
-    const emission = convertedFuelAmount * emissionData.factor;
+    const emission = req.fuelAmount * req.emissionFactor;
     return Number(emission.toFixed(PRECISION));
   }
-
-
 }
