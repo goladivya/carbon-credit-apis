@@ -1,10 +1,14 @@
 import { CreditCreationRequest } from "./creditCreationRequest";
-import { HydroConstant } from "../constants/hydroConstants";
 
-export class HydroCreationRequest  implements  CreditCreationRequest{
-     reservoirArea ! :number;
-     areaUnit!:string;
-     duration!:number;
-     durationUnit!:string;
-     hydroConstant = new HydroConstant();
+export class HydroCreationRequest implements CreditCreationRequest {
+  reservoirArea!: number;
+  areaUnit!: string;
+  duration!: number;
+  durationUnit!: string;
+  hydroConstant!: {
+    factor: number;
+    unit: string;
+    source: string;
+    year: number;
+  };
 }
