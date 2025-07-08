@@ -16,7 +16,7 @@ https://carbon-credit-calculator.onrender.com
 - 🔄 Real-time results and interactive form inputs
 
 ## 📁 Folder Structure
-
+```
 carbon-credit-calculator/
 ├── public/ # Frontend (index.html, CSS, JS)
 ├── src/ # Source TypeScript files
@@ -27,6 +27,7 @@ carbon-credit-calculator/
 ├── package.json
 ├── tsconfig.json
 └── README.md
+```
 
 
 ##  Tech Stack
