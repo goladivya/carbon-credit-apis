@@ -341,6 +341,7 @@ app.post("/api/calculate", (req: Request, res: Response): void => {
 
 
 
+
 app.get("/api/v1/docs", (req, res) => {
   const html = `
     <!DOCTYPE html>
@@ -377,20 +378,20 @@ app.get("/api/v1/docs", (req, res) => {
       </style>
     </head>
     <body>
-      <h1>🌍 Carbon Credit Calculator API - v1</h1>
+      <h1> Carbon Credit Calculator API - v1</h1>
       <p>This API allows you to calculate carbon credits for various sectors including Solar, Thermal, Hydro, Transmission, and Transportation.</p>
       
-      <h2>🚀 Endpoint</h2>
+      <h2> Endpoint</h2>
       <pre><code>POST /api/v1/calculate</code></pre>
 
-      <h3>🔧 Request Format</h3>
+      <h3> Request Format</h3>
       <pre><code>{
   "type": "solar" | "thermal" | "hydro" | "transmission" | "transportation",
   "data": { ...sectorSpecificInput },
   "countryCode": "US" | "IN" | "UK" | "DE" | "FR"
 }</code></pre>
 
-      <h3>📦 Sample cURL</h3>
+      <h3> Sample cURL</h3>
       <pre><code>curl -X POST http://localhost:3050/api/v1/calculate \\
   -H "Content-Type: application/json" \\
   -d '{
@@ -403,10 +404,10 @@ app.get("/api/v1/docs", (req, res) => {
     "countryCode": "US"
   }'</code></pre>
 
-      <h3>🔐 Auth & Rate Limits</h3>
+      <h3> Auth & Rate Limits</h3>
       <p>Currently, no authentication is required. Rate limiting is not enforced in development but should be added in production (e.g., using <code>express-rate-limit</code>).</p>
 
-      <h3>📑 Response</h3>
+      <h3> Response</h3>
       <pre><code>{
   "result": 1.24,
   "emissionFactor": 0.45,
@@ -415,13 +416,14 @@ app.get("/api/v1/docs", (req, res) => {
   ...
 }</code></pre>
 
-      <h3>📈 Versioning</h3>
+      <h3> Versioning</h3>
       <p>All endpoints are prefixed with <code>/api/v1</code>. Future versions will be available at <code>/api/v2</code>, etc.</p>
 
-      <h3>🆕 Changelog</h3>
+      <h3> Changelog</h3>
       <ul>
         <li><strong>v1.0.0</strong>: Initial release with all core calculators.</li>
         <li><strong>v1.1.0</strong>: Added documentation and versioning.</li>
+        <li><strong>v1.2.0</strong>: Improved error handling and response structure.</li>
       </ul>
     </body>
     </html>
@@ -434,6 +436,7 @@ const PORT = 3050;
 app.listen(PORT, () => {
   console.log(` Server running on http://localhost:${PORT}`);
 });
+
 // For testing purposes, you can use tools like Postman or cURL to send POST requests to this server.
 // Example request body for solar:
 // {

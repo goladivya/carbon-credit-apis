@@ -175,4 +175,3 @@ Errors:-
 | `400`     | Invalid `type` or malformed input |
 | `422`     | Missing required fields           |
 | `500`     | Server error / calculator failure |
-
